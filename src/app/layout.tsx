@@ -1,26 +1,37 @@
 import './style.css';
 
+import Provider from './provider';
+import Navbar from '../components/Navbar';
+import { getServerSession } from 'next-auth';
+import { options } from './api/auth/[...nextauth]/options';
+
 export const metadata = {
   title: 'Dcard Frontend 2024',
   description: '',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <body>
-        <header>
-        </header>
+  const session = await getServerSession(options);
 
-        <main>{ children }</main>
-        
-        <footer>
-        </footer>
-      </body>
-    </html>
+  return (
+    <Provider session={session}>
+      <html lang="en">
+        <body>
+          <header>
+            <Navbar />
+          </header>
+
+          <main>{ children }</main>
+          
+          <footer>
+            {/* <p>© 2024 Dcard</p> */}
+          </footer>
+          </body>
+      </html>
+    </Provider>
   )
 }
