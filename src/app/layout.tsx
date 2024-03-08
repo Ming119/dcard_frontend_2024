@@ -21,11 +21,11 @@ export default async function RootLayout({
     <Provider session={session}>
       <html lang="en">
         <body>
-          <header>
+          <header className="bg-blue-500 text-white">
             <Navbar />
           </header>
 
-          <main>{ children }</main>
+          <main className="container mx-auto">{ children }</main>
           
           <footer>
             {/* <p>© 2024 Dcard</p> */}

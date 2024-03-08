@@ -1,9 +1,15 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
+import InfiniteScroll from '@/components/InfiniteScroll';
+
 const Page = () => {
+  const { data: session } = useSession();
+  const token = session?.access_token || process.env.GITHUB_TOKEN!;
+
   return (
     <div>
-      <h1>Home Page</h1>
+      <InfiniteScroll token={token} />
     </div>
   );
 }
