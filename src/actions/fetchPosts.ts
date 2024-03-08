@@ -16,6 +16,7 @@ export const fetchPosts = async (
     repo,
     per_page,
     page,
+    state: 'open',
   });
   return response.data.map((issue: any) => {
     const { number, title, body, comments, labels, created_at, user} = issue;
@@ -24,7 +25,7 @@ export const fetchPosts = async (
     if (body.length > short_body.length) {
       short_body += '...';
     }
-    const createdAt = created_at.replace('T', ' ').replace('Z', '');
+    const createdAt = new Date(created_at).toLocaleString();
     return {
       number,
       title,

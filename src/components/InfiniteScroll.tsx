@@ -11,9 +11,9 @@ export const InfiniteScroll = ({
   token: string
 }) => {
   const per_page: number = 10;
-  const [page, setPage] = useState<number>(1);
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [hasMore, setHasMore] = useState(true);
+  const [ page, setPage ] = useState<number>(1);
+  const [ posts, setPosts ] = useState<Post[]>([]);
+  const [ hasMore, setHasMore ] = useState(true);
   const { ref, inView } = useInView();
 
   const loadMorePosts = async () => {
@@ -25,9 +25,8 @@ export const InfiniteScroll = ({
   };
 
   useEffect(() => {
-    if (hasMore && inView) {
+    if (hasMore && inView)
       loadMorePosts();
-    }
   }, [inView]);
 
   return (
@@ -41,7 +40,7 @@ export const InfiniteScroll = ({
         </div>
         : <p className="text-center text-gray-500 font-bold">No more posts</p>
       }
-      </div>
+    </div>
   )
 };
 

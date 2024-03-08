@@ -5,7 +5,7 @@ import Link from 'next/link';
 export const PostCard = ({ post }: { post: Post }) => {
   return (
     <Link href={`/post/${post.number}`}>
-      <div className="bg-gray-100 p-4 my-4 mx-8 rounded">
+      <div className="bg-gray-100 p-4 my-4 rounded rounded-lg">
         <div className="flex items-center gap-x-2 mb-1">
           <Image
             priority  = {true} // LCP optimization
