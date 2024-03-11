@@ -6,10 +6,12 @@ import useToken from "@/hooks/useToken";
 import fetchPost from "@/actions/fetchPost";
 import { useEffect, useRef, useState } from "react";
 import CommentInfiniteScroll from "@/components/CommentInfiniteScroll";
+import addComment from "@/actions/addComment";
 
 export const PostPage = ({ params }: { params: { id: string } }) => {
   const token = useToken();
   const [post, setPost] = useState<Post | null>(null);
+  const [hasNewComment, setHasNewComment] = useState<boolean>(false);
   const commentRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -21,14 +23,15 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
     postInit();
   }, []);
 
-  const addComment = async () => {
+  const addCommentHandler = async () => {
     if (!commentRef.current) return;
     const comment = commentRef.current.value;
     if (comment === "") return;
 
-    console.log("Adding comment", comment);
-    // Add comment to post
+    const id = parseInt(params.id);
+    const commentAdded = await addComment(token, id, comment);
     commentRef.current.value = "";
+    setHasNewComment(true);
   };
 
   return (
@@ -61,7 +64,12 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
 
           <div>
             <h2 className="text-2xl font-bold">Comments</h2>
-            <CommentInfiniteScroll token={token} postNumber={post.number} />
+            <CommentInfiniteScroll
+              token={token}
+              postNumber={post.number}
+              hasNewComment={hasNewComment}
+              setHasNewComment={setHasNewComment}
+            />
           </div>
 
           <div className="grid grid-cols-12 fixed bottom-0">
@@ -72,7 +80,7 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
             />
             <button
               className="bg-blue-500 text-white rounded-md p-3"
-              onClick={addComment}
+              onClick={addCommentHandler}
             >
               Add Comment
             </button>

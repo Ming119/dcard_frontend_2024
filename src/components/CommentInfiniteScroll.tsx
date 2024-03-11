@@ -8,9 +8,13 @@ import fetchPostComments from "@/actions/fetchPostComments";
 export const CommentInfiniteScroll = ({
   token,
   postNumber,
+  hasNewComment,
+  setHasNewComment,
 }: {
   token: string;
   postNumber: number;
+  hasNewComment: boolean;
+  setHasNewComment: (hasNewComment: boolean) => void;
 }) => {
   const per_page: number = 10;
   const [page, setPage] = useState<number>(1);
@@ -34,6 +38,15 @@ export const CommentInfiniteScroll = ({
     if (hasMore && inView) loadMoreComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
+
+  useEffect(() => {
+    if (hasNewComment) {
+      setComments([]);
+      setPage(1);
+      setHasMore(true);
+      setHasNewComment(false);
+    }
+  }, [hasNewComment]);
 
   return (
     <div className="m-4">
