@@ -1,9 +1,9 @@
-import User from './User';
+import User from "./User";
 
 interface Label {
   name: string;
   color: string;
-};
+}
 
 export interface Post {
   number: number;
@@ -13,6 +13,6 @@ export interface Post {
   labels: Label[];
   createdAt: string;
   user: User;
-};
+}
 
 export default Post;

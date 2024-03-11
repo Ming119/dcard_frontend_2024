@@ -1,12 +1,12 @@
-import { Post } from '@/types/Post';
-import { Octokit } from '@octokit/rest';
+import { Post } from "@/types/Post";
+import { Octokit } from "@octokit/rest";
 
 export const fetchPosts = async (
   token: string,
   page: number,
-  per_page: number,
+  per_page: number
 ) => {
-  const octokit = new Octokit({auth: token});
+  const octokit = new Octokit({ auth: token });
 
   const owner = process.env.GITHUB_OWNER!;
   const repo = process.env.GITHUB_REPO!;
@@ -16,14 +16,17 @@ export const fetchPosts = async (
     repo,
     per_page,
     page,
-    state: 'open',
+    state: "open",
   });
   return response.data.map((issue: any) => {
-    const { number, title, body, comments, labels, created_at, user} = issue;
-    let short_body = body.split(' ').filter((word: string) => word !== '')
-                            .slice(0, 16).join(' ');
+    const { number, title, body, comments, labels, created_at, user } = issue;
+    let short_body = body
+      .split(" ")
+      .filter((word: string) => word !== "")
+      .slice(0, 16)
+      .join(" ");
     if (body.length > short_body.length) {
-      short_body += '...';
+      short_body += "...";
     }
     const createdAt = new Date(created_at).toLocaleString();
     return {
@@ -37,7 +40,7 @@ export const fetchPosts = async (
         id: user.id,
         username: user.login,
         avatar_url: user.avatar_url,
-      }
+      },
     } as Post;
   });
 };

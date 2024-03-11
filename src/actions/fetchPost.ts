@@ -1,11 +1,8 @@
 import Post from "@/types/Post";
 import { Octokit } from "@octokit/rest";
 
-export const fetchPost = async (
-  token: string,
-  issue_number: number
-) => {
-  const octokit = new Octokit({auth: token});
+export const fetchPost = async (token: string, issue_number: number) => {
+  const octokit = new Octokit({ auth: token });
 
   const owner = process.env.GITHUB_OWNER!;
   const repo = process.env.GITHUB_REPO!;
@@ -15,7 +12,8 @@ export const fetchPost = async (
     issue_number,
   });
 
-  const { number, title, body, comments, labels, created_at, user} = response.data;
+  const { number, title, body, comments, labels, created_at, user } =
+    response.data;
   const createdAt = new Date(created_at).toLocaleString();
   return {
     number,
@@ -28,7 +26,7 @@ export const fetchPost = async (
       id: user?.id,
       username: user?.login,
       avatar_url: user?.avatar_url,
-    }
+    },
   } as Post;
 };
 
