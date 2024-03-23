@@ -35,6 +35,9 @@ export const CommentInfiniteScroll = ({
   };
 
   useEffect(() => {
+    // FIXME: sometimes it doesn't load the least comments after adding a new comment
+    // Figure out that the GitHub rest API doesn't update the comments immediately
+    // Maybe it's a caching issue
     if (hasMore && inView) loadMoreComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);

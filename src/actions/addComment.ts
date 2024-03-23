@@ -1,7 +1,7 @@
 "use server";
 
 import { Octokit } from "@octokit/rest";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export const addComment = async (
   token: string,
@@ -21,7 +21,7 @@ export const addComment = async (
     });
     if (response.status !== 201)
       throw new Error("Failed to add comment. Please try again.");
-    revalidateTag(`/post/${postId}`);
+    revalidatePath(`/post/${postId}`);
     return { status: "success", message: "Comment added." };
   } catch (error) {
     console.error("Error adding comment", error);

@@ -1,7 +1,6 @@
 "use client";
 
-import "./default.css";
-
+import Link from "next/link";
 import Image from "next/image";
 import Post from "@/types/Post";
 import { toast } from "react-toastify";
@@ -12,11 +11,14 @@ import addComment from "@/actions/addComment";
 import deletePost from "@/actions/deletePost";
 import { useEffect, useRef, useState } from "react";
 import CommentInfiniteScroll from "@/components/CommentInfiniteScroll";
+import { remark } from "remark";
+import html from "remark-html";
 
 export const PostPage = ({ params }: { params: { id: string } }) => {
   const session = useSession();
   const token = useToken();
   const [post, setPost] = useState<Post | null>(null);
+  const [commentsCount, setCommentsCount] = useState<number>(0);
   const [hasNewComment, setHasNewComment] = useState<boolean>(false);
   const commentRef = useRef<HTMLTextAreaElement>(null);
 
@@ -24,7 +26,10 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
     const postInit = async () => {
       const id = parseInt(params.id);
       const post = await fetchPost(token, id);
+      const content = (await remark().use(html).process(post.body)).toString();
+      post.body = content;
       setPost(post);
+      setCommentsCount(post.comments);
     };
     postInit();
   }, []);
@@ -54,6 +59,7 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
     toast.success(response.message as string);
     commentRef.current.value = "";
     setHasNewComment(true);
+    setCommentsCount((prev) => prev + 1);
   };
 
   return (
@@ -64,9 +70,11 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
             <p className="text-4xl font-bold">{post.title}</p>
             {post.user.id === parseInt(session.data?.user?.id!) && (
               <div>
-                <button className="bg-blue-500 text-white p-3 rounded-l-md">
-                  Edit Post
-                </button>
+                <Link href={`/post/${params.id}/edit`}>
+                  <button className="bg-blue-500 text-white rounded-l-md p-3">
+                    Edit Post
+                  </button>
+                </Link>
                 <button
                   className="bg-red-500 text-white rounded-r-md p-3"
                   onClick={deletePostHandler}
@@ -94,7 +102,7 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
           ></p>
 
           <div className="flex my-3 gap-x-3 text-gray-500 text-sm">
-            {post.comments} comments
+            {commentsCount} comments
             {post.labels.map((label) => (
               <span key={label.name}>#{label.name}</span>
             ))}
