@@ -1,14 +1,20 @@
 "use client";
 
+import "./default.css";
+
 import Image from "next/image";
 import Post from "@/types/Post";
+import { toast } from "react-toastify";
 import useToken from "@/hooks/useToken";
 import fetchPost from "@/actions/fetchPost";
+import { useSession } from "next-auth/react";
+import addComment from "@/actions/addComment";
+import deletePost from "@/actions/deletePost";
 import { useEffect, useRef, useState } from "react";
 import CommentInfiniteScroll from "@/components/CommentInfiniteScroll";
-import addComment from "@/actions/addComment";
 
 export const PostPage = ({ params }: { params: { id: string } }) => {
+  const session = useSession();
   const token = useToken();
   const [post, setPost] = useState<Post | null>(null);
   const [hasNewComment, setHasNewComment] = useState<boolean>(false);
@@ -23,13 +29,29 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
     postInit();
   }, []);
 
+  const deletePostHandler = async () => {
+    const id = parseInt(params.id);
+    const response = await deletePost(token, id);
+    if (response.status === "success") {
+      toast.success(response.message as string);
+      window.location.href = "/";
+      return;
+    }
+    toast.error(response.message as string);
+  };
+
   const addCommentHandler = async () => {
     if (!commentRef.current) return;
     const comment = commentRef.current.value;
     if (comment === "") return;
 
     const id = parseInt(params.id);
-    const commentAdded = await addComment(token, id, comment);
+    const response = await addComment(token, id, comment);
+    if (response.status === "error") {
+      toast.error(response.message as string);
+      return;
+    }
+    toast.success(response.message as string);
     commentRef.current.value = "";
     setHasNewComment(true);
   };
@@ -37,8 +59,23 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
   return (
     <>
       {post && (
-        <div className="mt-5 mb-20 mx-24">
-          <h1 className="text-4xl font-bold">{post.title}</h1>
+        <div className="mt-5 mb-24 mx-24">
+          <div className="flex items-center justify-between">
+            <p className="text-4xl font-bold">{post.title}</p>
+            {post.user.id === parseInt(session.data?.user?.id!) && (
+              <div>
+                <button className="bg-blue-500 text-white p-3 rounded-l-md">
+                  Edit Post
+                </button>
+                <button
+                  className="bg-red-500 text-white rounded-r-md p-3"
+                  onClick={deletePostHandler}
+                >
+                  Delete Post
+                </button>
+              </div>
+            )}
+          </div>
           <div className="flex items-center gap-x-2 my-3 text-gray-500 text-sm">
             <Image
               priority={true}
@@ -51,7 +88,10 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
             <p>{post.user.username}</p>
             <p>{post.createdAt}</p>
           </div>
-          <p className="my-3">{post.body}</p>
+          <p
+            className="my-3"
+            dangerouslySetInnerHTML={{ __html: post.body }}
+          ></p>
 
           <div className="flex my-3 gap-x-3 text-gray-500 text-sm">
             {post.comments} comments
@@ -63,7 +103,7 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
           <hr className="my-3" />
 
           <div>
-            <h2 className="text-2xl font-bold">Comments</h2>
+            <p className="text-2xl font-bold">Comments</p>
             <CommentInfiniteScroll
               token={token}
               postNumber={post.number}
@@ -71,20 +111,21 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
               setHasNewComment={setHasNewComment}
             />
           </div>
-
-          <div className="grid grid-cols-12 fixed bottom-0">
-            <textarea
-              ref={commentRef}
-              className="form-textarea rounded-md resize-none col-span-9"
-              placeholder="Add a comment"
-            />
-            <button
-              className="bg-blue-500 text-white rounded-md p-3"
-              onClick={addCommentHandler}
-            >
-              Add Comment
-            </button>
-          </div>
+          {token && (
+            <div className="grid grid-cols-12 fixed bottom-0">
+              <textarea
+                ref={commentRef}
+                className="form-textarea rounded-md resize-none col-span-9"
+                placeholder="Add a comment"
+              />
+              <button
+                className="bg-blue-500 text-white rounded-md p-3"
+                onClick={addCommentHandler}
+              >
+                Add Comment
+              </button>
+            </div>
+          )}
         </div>
       )}
     </>

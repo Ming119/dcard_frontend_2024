@@ -1,5 +1,7 @@
 import Post from "@/types/Post";
 import { Octokit } from "@octokit/rest";
+import { remark } from "remark";
+import html from "remark-html";
 
 export const fetchPost = async (token: string, issue_number: number) => {
   const octokit = new Octokit({ auth: token });
@@ -15,10 +17,17 @@ export const fetchPost = async (token: string, issue_number: number) => {
   const { number, title, body, comments, labels, created_at, user } =
     response.data;
   const createdAt = new Date(created_at).toLocaleString();
+
+  const content = (
+    await remark()
+      .use(html)
+      .process(body as string)
+  ).toString();
+
   return {
     number,
     title,
-    body,
+    body: content,
     comments,
     labels,
     createdAt,

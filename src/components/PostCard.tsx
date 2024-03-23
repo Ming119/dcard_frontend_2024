@@ -18,7 +18,7 @@ export const PostCard = ({ post }: { post: Post }) => {
           <p>{post.user.username}</p>
           <p className="mx-2 text-gray-500 text-sm">{post.createdAt}</p>
         </div>
-        <h2 className="text-xl font-bold">{post.title}</h2>
+        <p className="text-xl font-bold">{post.title}</p>
         <p>{post.body}</p>
         <div className="flex gap-x-2 text-gray-500 text-sm">
           <p className="mr-2">{post.comments} comments</p>
