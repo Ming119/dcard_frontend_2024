@@ -40,16 +40,17 @@ const Navbar = () => {
             <Link href="/post/create" className="text-white hover:underline">
               Create Post
             </Link>
-            <Link href="/profile">
-              <Image
-                priority={true} // LCP optimization
-                src={session?.user.image!}
-                alt={`Profile Picture for ${session?.user.name!}`}
-                width={24}
-                height={24}
-                className="rounded-full"
-              />
-            </Link>
+            {/* Profile page not implemented */}
+            {/* <Link href="/profile"> */}
+            <Image
+              priority={true} // LCP optimization
+              src={session?.user.image!}
+              alt={`Profile Picture for ${session?.user.name!}`}
+              width={24}
+              height={24}
+              className="rounded-full"
+            />
+            {/* </Link> */}
             <button
               className="text-white hover:underline"
               onClick={() => signOut({ callbackUrl: "/" })}

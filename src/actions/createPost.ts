@@ -2,7 +2,6 @@
 
 import { Octokit } from "@octokit/rest";
 import { revalidateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
 export const createPost = async (formData: FormData) => {
   const token = formData.get("accessToken") as string;
@@ -12,7 +11,6 @@ export const createPost = async (formData: FormData) => {
   const body = formData.get("body") as string;
   const octokit = new Octokit({ auth: token });
 
-  // TODO: add pop-up for error handling
   try {
     const response = await octokit.rest.issues.create({
       owner,
@@ -21,13 +19,16 @@ export const createPost = async (formData: FormData) => {
       body,
     });
 
-    if (response.status !== 201) throw new Error("Failed to create post");
-
+    if (response.status !== 201)
+      throw new Error("Failed to create post. Please try again later.");
     revalidateTag("/");
+    return { status: "success", message: "Post created" };
   } catch (e) {
     console.error(e);
-  } finally {
-    redirect("/");
+    return {
+      status: "error",
+      message: e,
+    };
   }
 };
 

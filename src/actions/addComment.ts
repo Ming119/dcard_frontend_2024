@@ -19,11 +19,13 @@ export const addComment = async (
       issue_number: postId,
       body: comment,
     });
-    if (response.status !== 201) throw new Error("Failed to add comment");
+    if (response.status !== 201)
+      throw new Error("Failed to add comment. Please try again.");
+    revalidateTag(`/post/${postId}`);
+    return { status: "success", message: "Comment added." };
   } catch (error) {
     console.error("Error adding comment", error);
-  } finally {
-    revalidateTag(`/post/${postId}`);
+    return { status: "error", message: error };
   }
 };
 

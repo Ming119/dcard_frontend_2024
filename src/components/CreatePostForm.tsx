@@ -1,4 +1,6 @@
+import { toast } from "react-toastify";
 import { useRef, useState } from "react";
+import { redirect } from "next/navigation";
 import { createPost } from "@/actions/createPost";
 
 export const CreatePostForm = ({ accessToken }: { accessToken: string }) => {
@@ -28,7 +30,13 @@ export const CreatePostForm = ({ accessToken }: { accessToken: string }) => {
       setBodyError(null);
     }
 
-    await createPost(formData);
+    const response = await createPost(formData);
+    if (response.status === "success") {
+      toast.success(response.message as string);
+      redirect("/");
+    } else {
+      toast.error(response.message as string);
+    }
   };
 
   return (

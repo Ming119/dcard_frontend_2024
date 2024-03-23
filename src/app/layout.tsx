@@ -1,9 +1,11 @@
 import "./style.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import Provider from "./provider";
 import Navbar from "../components/Navbar";
 import { getServerSession } from "next-auth";
 import { options } from "./api/auth/[...nextauth]/options";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "Dcard Frontend 2024",
@@ -28,6 +30,7 @@ export default async function RootLayout({
           <main className="container mx-auto">{children}</main>
 
           <footer>{/* <p>© 2024 Dcard</p> */}</footer>
+          <ToastContainer position="top-center" autoClose={2000} />
         </body>
       </html>
     </Provider>
