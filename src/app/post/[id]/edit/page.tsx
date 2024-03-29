@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { editPost } from "@/actions/editPost";
 import { fetchPost } from "@/actions/fetchPost";
 
-export const PostEdit = ({ params }: { params: { id: string } }) => {
+export default function EditPost({ params }: { params: { id: string } }) {
   const accessToken = useToken();
 
   const [title, setTitle] = useState<string>("");
@@ -23,7 +23,7 @@ export const PostEdit = ({ params }: { params: { id: string } }) => {
       setBody(post.body);
     };
     postInit();
-  }, []);
+  }, [accessToken, params.id]);
 
   const submitHandler = async (formData: FormData) => {
     if (title === "") {
@@ -92,7 +92,7 @@ export const PostEdit = ({ params }: { params: { id: string } }) => {
           name="body"
           rows={8}
           placeholder="Write your thoughts here..."
-          className="form-textare p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg"
+          className="form-textarea p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg"
         />
       </div>
 
@@ -104,6 +104,4 @@ export const PostEdit = ({ params }: { params: { id: string } }) => {
       </button>
     </form>
   );
-};
-
-export default PostEdit;
+}

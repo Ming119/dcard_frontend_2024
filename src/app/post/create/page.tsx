@@ -4,7 +4,7 @@ import useToken from "@/hooks/useToken";
 import { redirect } from "next/navigation";
 import { CreatePostForm } from "@/components/CreatePostForm";
 
-const CreatePost = () => {
+export default function CreatePost() {
   const token = useToken();
 
   if (!token) redirect("/sign-in");
@@ -15,6 +15,4 @@ const CreatePost = () => {
       <CreatePostForm accessToken={token} />
     </div>
   );
-};
-
-export default CreatePost;
+}

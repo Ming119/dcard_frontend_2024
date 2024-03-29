@@ -14,7 +14,7 @@ import CommentInfiniteScroll from "@/components/CommentInfiniteScroll";
 import { remark } from "remark";
 import html from "remark-html";
 
-export const PostPage = ({ params }: { params: { id: string } }) => {
+export default function PostPage({ params }: { params: { id: string } }) {
   const session = useSession();
   const token = useToken();
   const [post, setPost] = useState<Post | null>(null);
@@ -32,7 +32,7 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
       setCommentsCount(post.comments);
     };
     postInit();
-  }, []);
+  }, [token, params.id]);
 
   const deletePostHandler = async () => {
     const id = parseInt(params.id);
@@ -138,6 +138,4 @@ export const PostPage = ({ params }: { params: { id: string } }) => {
       )}
     </>
   );
-};
-
-export default PostPage;
+}
