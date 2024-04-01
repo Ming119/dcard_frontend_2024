@@ -6,10 +6,10 @@ You can view the live demo [here](http://danielblog.ddns.net).
 ## Development Environment
 
 - OS: Ubuntu 20.04.6 LTS
-- Programming Language: C++
-- Compiler: g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
-
-Note that there is no guarantee that the project will work on other operating systems or compilers.
+- Programming Language: TypeScript
+- Package Manager: npm 10.4.0
+- Node.js: 21.0.0
+  Note that there is no guarantee that the project will work on other operating systems or compilers.
 
 ## Project Structure
 
