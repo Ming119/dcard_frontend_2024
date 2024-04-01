@@ -3,6 +3,14 @@
 This project is built with Next.js, TypeScript, and Tailwind CSS.
 You can view the live demo [here](http://danielblog.ddns.net).
 
+## Development Environment
+
+- OS: Ubuntu 20.04.6 LTS
+- Programming Language: C++
+- Compiler: g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+
+Note that there is no guarantee that the project will work on other operating systems or compilers.
+
 ## Project Structure
 
 All of the source code is located in the `src` directory. The `src` directory contains the following subdirectories and files:
