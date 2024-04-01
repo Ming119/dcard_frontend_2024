@@ -9,7 +9,8 @@ You can view the live demo [here](http://danielblog.ddns.net).
 - Programming Language: TypeScript
 - Package Manager: npm 10.4.0
 - Node.js: 21.0.0
-  Note that there is no guarantee that the project will work on other operating systems or compilers.
+
+Note that there is no guarantee that the project will work on other operating systems or compilers.
 
 ## Project Structure
 
