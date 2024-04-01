@@ -47,7 +47,12 @@ All of the source code is located in the `src` directory. The `src` directory co
 
 ## Local Environment Setup
 
-Before you start the project, you have to [create a OAuth App on GitHub](https://github.com/settings/applications/new) and get the `Client ID` and `Client secrets`. Then, create a `.env.local` file in the root directory and fill in the following information:
+Before you start the project, you have to [create a OAuth App on GitHub](https://github.com/settings/applications/new) with the following settings:
+
+- Homepage URL: `http://localhost:3000` (or your deployment URL)
+- Authorization callback URL: `http://localhost:3000/api/auth/callback/github` (or your deployment URL)
+
+and get the `Client ID` and `Client secrets`. Then, create a `.env.local` file in the root directory and fill in the following information:
 
 ```bash
 # ./.env.local
@@ -105,6 +110,14 @@ GITHUB_REPO=`your_repository_name`
 
 Your local environment is ready to go now!
 
+## Installation
+
+First, you need to install the dependencies by running the following command:
+
+```bash
+npm install
+```
+
 ## Running the Project
 
 You can run the project by running the following command:
@@ -114,3 +127,8 @@ npm run dev
 ```
 
 Now you can view the app by opening [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Known Issues
+
+- Posts or comments may not up to date due after actions (e.g., create, edit, delete) due to the GitHub API cache.
+- The `next-auth` requires a server runtime, so it cannot be deployed to static hosting like Google Firebase Hosting.
